@@ -6,7 +6,7 @@ const db = require('../db/db'); // ==> El objeto db posee los metodos para conec
 
 //getAllMovies: devolverá todas las peliculas cargadas en la base de datos
 const getAllMovies = (req, res) => {
-    const sql = 'SELECT * FROM movies'; // Este string se usara en la base de datos.
+    const sql = 'SELECT * FROM peliculas'; // Este string se usara en la base de datos.
     db.query(sql, (err, results) =>{
         if (err) throw err;
         res.json(results);
@@ -16,7 +16,7 @@ const getAllMovies = (req, res) => {
 //getMovieByID: buscará y devolverá de la base de datos la pelicula cuyo ID se especifique en la busqueda
 const getMovieByID = (req, res) => {
     const { id } = req.params;
-    const sql = 'SELECT * FROM movies WHERE id = ?';
+    const sql = 'SELECT * FROM peliculas WHERE id = ?';
     db.query(sql, [id], (err, result) => {
         if (err) throw err;
         res.json(result);
@@ -25,9 +25,9 @@ const getMovieByID = (req, res) => {
 
 //createMovie: realiza el alta de una pelicula y la inserta en la base de datos
 const createMovie = (req, res) => {
-    const { title, director, year } = req.body;
-    const sql = 'INSERT INTO movies (title, director, year) VALUES (?, ?, ?)';
-    db.query(sql, [title, director, year], (err, result) => {
+    const { titulo, director, anio } = req.body;
+    const sql = 'INSERT INTO peliculas (titulo, director, anio) VALUES (?, ?, ?)';
+    db.query(sql, [titulo, director, anio], (err, result) => {
         if (err) throw err;
         res.json({ message: 'Pelicula creada con éxito!', movieId: result.insertId});
     });
@@ -36,9 +36,9 @@ const createMovie = (req, res) => {
 //updateMovie: realiza modificaciones en la base de datos por medio del ID de la pelicula
 const updateMovie = (req, res) => {
     const { id } = req.params;
-    const { title, director, year } = req.body;
-    const sql = 'UPDATE movies SET title = ?, director = ?, year = ? WHERE id = ?';
-    db.query(sql, [title, director, year, id], (err, result) => {
+    const { titulo, director, anio } = req.body;
+    const sql = 'UPDATE peliculas SET titulo = ?, director = ?, anio = ? WHERE id = ?';
+    db.query(sql, [titulo, director, anio, id], (err, result) => {
         if (err) throw err;
         res.json({ message: 'Datos de la pelicula actualizados'});
     });
@@ -47,7 +47,7 @@ const updateMovie = (req, res) => {
 //deleteMovie: realiza el borrado fisico de recursos de la base de datos mediante un ID
 const deleteMovie = (req, res) => {
     const { id } = req.params;
-    const sql = 'DELETE FROM movies WHERE id = ?';
+    const sql = 'DELETE FROM peliculas WHERE id = ?';
     db.query(sql, [id], (err, result) => {
         if (err) throw err;
         res.json({ message: 'Pelicula borrada de la base de datos!'});
