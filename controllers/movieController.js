@@ -25,9 +25,9 @@ const getMovieByID = (req, res) => {
 
 //createMovie: realiza el alta de una pelicula y la inserta en la base de datos
 const createMovie = (req, res) => {
-    const { titulo, director, anio } = req.body;
-    const sql = 'INSERT INTO peliculas (titulo, director, anio) VALUES (?, ?, ?)';
-    db.query(sql, [titulo, director, anio], (err, result) => {
+    const { titulo, id_director, anio, id_genero } = req.body;
+    const sql = 'INSERT INTO peliculas (titulo, id_director, anio, id_genero) VALUES (?, ?, ?, ?)';
+    db.query(sql, [titulo, id_director, anio, id_genero], (err, result) => {
         if (err) throw err;
         res.json({ message: 'Pelicula creada con éxito!', movieId: result.insertId});
     });
@@ -36,11 +36,41 @@ const createMovie = (req, res) => {
 //updateMovie: realiza modificaciones en la base de datos por medio del ID de la pelicula
 const updateMovie = (req, res) => {
     const { id } = req.params;
-    const { titulo, director, anio } = req.body;
-    const sql = 'UPDATE peliculas SET titulo = ?, director = ?, anio = ? WHERE id = ?';
-    db.query(sql, [titulo, director, anio, id], (err, result) => {
+    const { titulo, id_director, anio, id_genero } = req.body;
+    let sql = 'UPDATE peliculas SET';
+    const params = [];
+    // Condicionales. Cuando la consulta no recibe parametros que cambian los datos de un campo, los deja como estan.
+    if (titulo) { // Si recibe un valor "titulo"...
+        sql += ' titulo = ?,'; // Concatena el string a la variable "sql" que contiene la query que se le dará a la base de datos
+        params.push(titulo); // Agrega los argumentos al array de parametros 
+    }
+    if (id_director) {
+        sql += ' id_director = ?,';
+        params.push(id_director);
+    }
+    if (anio) {
+        sql += ' anio = ?,';
+        params.push(anio);
+    }
+    if (id_genero) {
+        sql += ' id_genero = ?,';
+        params.push(id_genero);
+    }
+
+    // Elimina la coma final si hay campos afectados
+    if (params.length > 0) { // Si el array de los parametros tiene datos (mayor a 0)...
+        sql = sql.slice(0, -1); // ... eliminamos la ultima coma "," de la concatenacion en la query que se le manda a la base de datos mediante el metodo "slice"
+        sql += ' WHERE id = ?'; // Agregamos a la query el destino de la modificacion por parametro ID
+        params.push(id); // Pusheamos el ID al array de parametros
+    } else {
+        // Si no hay campos afectados, no se realiza ninguna actualización
+        res.json({ message: 'No se proporcionaron datos para actualizar' });
+        return;
+    }
+
+    db.query(sql, params, (err, result) => {
         if (err) throw err;
-        res.json({ message: 'Datos de la pelicula actualizados'});
+        res.json({ message: 'Datos de la película actualizados' });
     });
 };
 
