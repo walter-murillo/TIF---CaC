@@ -15,6 +15,37 @@ connection.connect((err) => {
         return;
     }
     console.log('Conectado a la base de datos.');
+
+    connection.query('CREATE DATABASE IF NOT EXISTS movies', (err, results) => {
+        if (err) {
+            console.error('Error creando base de datos', err);
+            return;
+        }
+        console.log('Base de datos asegurada');
+
+        connection.changeUser({ database: 'movies' }, (err) => {
+            if (err) {
+                console.error('Error cambiando a DB "movies".', err);
+                return;
+            }
+            const createTableQuery = `
+                CREATE TABLE IF NOT EXISTS peliculas (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    titulo VARCHAR(255) NOT NULL,
+                    anio INT NOT NULL,
+                    id_director INT,
+                    id_genero INT
+                );
+            `;
+            connection.query(createTableQuery, (err, results) => {
+                if (err) {
+                    console.error('Error creando tabla:', err);
+                    return;
+                }
+                console.log('Tabla asegurada.');
+            });
+        });
+    });
 });
 
 module.exports = connection;
