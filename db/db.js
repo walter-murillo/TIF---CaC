@@ -3,10 +3,10 @@
 const mysql = require('mysql2');
 
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'movies'
+    host: 'mysql-db-movies.alwaysdata.net',
+    user: 'db-movies_walter',
+    password: 'murillo36946994',
+    database: 'db-movies_test'
 });
 
 connection.connect((err) => {
@@ -16,14 +16,14 @@ connection.connect((err) => {
     }
     console.log('Conectado a la base de datos.');
 
-    connection.query('CREATE DATABASE IF NOT EXISTS movies', (err, results) => {
+    connection.query('SELECT * FROM peliculas', (err, results) => {
         if (err) {
             console.error('Error creando base de datos', err);
             return;
         }
         console.log('Base de datos asegurada');
 
-        connection.changeUser({ database: 'movies' }, (err) => {
+        connection.changeUser({ database: 'db-movies_test' }, (err) => {
             if (err) {
                 console.error('Error cambiando a DB "movies".', err);
                 return;
