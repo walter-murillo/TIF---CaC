@@ -16,7 +16,7 @@ connection.connect((err) => {
     }
     console.log('Conectado a la base de datos.');
 
-    connection.query('SELECT * FROM peliculas', (err, results) => {
+    connection.query('CREATE DATABASE IF NOT EXISTS `db-movies_test`', (err, results) => {
         if (err) {
             console.error('Error creando base de datos', err);
             return;
