@@ -25,7 +25,7 @@ connection.connect((err) => {
 
         connection.changeUser({ database: 'db-movies_test' }, (err) => {
             if (err) {
-                console.error('Error cambiando a DB "movies".', err);
+                console.error('Error cambiando a DB "db-movies_test".', err);
                 return;
             }
             const createTableQuery = `
