@@ -36,7 +36,7 @@ const createMovie = (req, res) => {
 //updateMovie: realiza modificaciones en la base de datos por medio del ID de la pelicula
 const updateMovie = (req, res) => {
     const { id } = req.params;
-    const { titulo, id_director, anio, id_genero, id__rangoEdad } = req.body;
+    const { titulo, id_director, anio, id_genero, id_rangoEdad } = req.body;
     let sql = 'UPDATE peliculas SET';
     const params = [];
     // Condicionales. Cuando la consulta no recibe parametros que cambian los datos de un campo, los deja como estan.
