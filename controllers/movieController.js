@@ -25,9 +25,9 @@ const getMovieByID = (req, res) => {
 
 //createMovie: realiza el alta de una pelicula y la inserta en la base de datos
 const createMovie = (req, res) => {
-    const { titulo, id_director, anio, id_genero } = req.body;
-    const sql = 'INSERT INTO peliculas (titulo, id_director, anio, id_genero) VALUES (?, ?, ?, ?)';
-    db.query(sql, [titulo, id_director, anio, id_genero], (err, result) => {
+    const { titulo, id_director, anio, id_genero, id_rangoEdad } = req.body;
+    const sql = 'INSERT INTO peliculas (titulo, id_director, anio, id_genero, id_rangoEdad) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql, [titulo, id_director, anio, id_genero, id_rangoEdad], (err, result) => {
         if (err) throw err;
         res.json({ message: 'Pelicula creada con éxito!', movieId: result.insertId});
     });
@@ -36,7 +36,7 @@ const createMovie = (req, res) => {
 //updateMovie: realiza modificaciones en la base de datos por medio del ID de la pelicula
 const updateMovie = (req, res) => {
     const { id } = req.params;
-    const { titulo, id_director, anio, id_genero } = req.body;
+    const { titulo, id_director, anio, id_genero, id__rangoEdad } = req.body;
     let sql = 'UPDATE peliculas SET';
     const params = [];
     // Condicionales. Cuando la consulta no recibe parametros que cambian los datos de un campo, los deja como estan.
@@ -55,6 +55,10 @@ const updateMovie = (req, res) => {
     if (id_genero) {
         sql += ' id_genero = ?,';
         params.push(id_genero);
+    }
+    if (id_rangoEdad) {
+        sql += ' id_rangoEdad = ?,';
+        params.push(id_rangoEdad);
     }
 
     // Elimina la coma final si hay campos afectados
