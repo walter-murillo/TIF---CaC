@@ -20,7 +20,11 @@ const getAllMovies = (req, res) => {
 //getMovieByID: buscará y devolverá de la base de datos la pelicula cuyo ID se especifique en la busqueda
 const getMovieByID = (req, res) => {
     const { id } = req.params;
-    const sql = 'SELECT * FROM peliculas WHERE id = ?';
+    const sql = `
+        SELECT p.id, p.titulo, p.anio, p.id_director, p.id_genero, p.id_rangoEdad, d.apellido, d.nombre, g.genero 
+        FROM peliculas p JOIN directores d ON p.id_director = d.id 
+        JOIN genero g ON p.id_genero = g.id 
+        GROUP BY p.id; WHERE id = ?`;
     db.query(sql, [id], (err, result) => {
         if (err) throw err;
         res.json(result);
