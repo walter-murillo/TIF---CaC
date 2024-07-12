@@ -21,10 +21,9 @@ const getAllMovies = (req, res) => {
 const getMovieByID = (req, res) => {
     const { id } = req.params;
     const sql = `
-        SELECT p.id, p.titulo, p.anio, p.id_director, p.id_genero, p.id_rangoEdad, d.apellido, d.nombre, g.genero 
+        SELECT p.titulo, p.anio, p.id_director, p.id_genero, p.id_rangoEdad, d.apellido, d.nombre, g.genero 
         FROM peliculas p JOIN directores d ON p.id_director = d.id 
-        JOIN genero g ON p.id_genero = g.id 
-        GROUP BY p.id
+        JOIN genero g ON p.id_genero = g.id
         WHERE p.id = ?;`;
     db.query(sql, [id], (err, result) => {
         if (err) throw err;
