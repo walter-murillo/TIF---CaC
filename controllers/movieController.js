@@ -6,8 +6,12 @@ const db = require('../db/db'); // ==> El objeto db posee los metodos para conec
 
 //getAllMovies: devolverá todas las peliculas cargadas en la base de datos
 const getAllMovies = (req, res) => {
-    const sql = 'SELECT * FROM peliculas'; // Este string se usara en la base de datos.
-    db.query(sql, (err, results) =>{
+    const sql = `
+        SELECT p.id, p.titulo, p.anio, d.apellido, d.nombre, g.genero 
+        FROM peliculas p JOIN directores d ON p.id_director = d.id 
+        JOIN genero g ON p.id_genero = g.id 
+        GROUP BY p.id;`; // Este string se usara en la base de datos.
+    db.query(sql, (err, results) => {
         if (err) throw err;
         res.json(results);
     });
@@ -29,7 +33,7 @@ const createMovie = (req, res) => {
     const sql = 'INSERT INTO peliculas (titulo, id_director, anio, id_genero, id_rangoEdad) VALUES (?, ?, ?, ?, ?)';
     db.query(sql, [titulo, id_director, anio, id_genero, id_rangoEdad], (err, result) => {
         if (err) throw err;
-        res.json({ message: 'Pelicula creada con éxito!', movieId: result.insertId});
+        res.json({ message: 'Pelicula creada con éxito!', movieId: result.insertId });
     });
 };
 
@@ -84,7 +88,7 @@ const deleteMovie = (req, res) => {
     const sql = 'DELETE FROM peliculas WHERE id = ?';
     db.query(sql, [id], (err, result) => {
         if (err) throw err;
-        res.json({ message: 'Pelicula borrada de la base de datos!'});
+        res.json({ message: 'Pelicula borrada de la base de datos!' });
     });
 };
 
